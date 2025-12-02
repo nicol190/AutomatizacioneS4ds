@@ -36,8 +36,13 @@ jobs:
     - name: Ejecutar pruebas Maven (headless)
       run: mvn clean test -Dheadless=true
 
+    - name: Listar reportes generados
+      run: |
+        echo "Archivos en la carpeta reports:"
+        ls -R reports/
+
     - name: Subir reportes
       uses: actions/upload-artifact@v4
       with:
         name: Reportes-Automation
-        path: target/surefire-reports/
+        path: reports/
