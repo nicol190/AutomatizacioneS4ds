@@ -1,0 +1,52 @@
+name: Automatización de Pedidos - CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout del repositorio
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    # 2. Configurar Java (Java 21)
+    - name: Configurar Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    # 3. Instalar Google Chrome
+    - name: Instalar Chrome
+      uses: browser-actions/setup-chrome@v1
+
+    # 4. Configurar ChromeDriver compatible
+    - name: Configurar ChromeDriver
+      uses: nanasess/setup-chromedriver@v2
+
+    # 5. Variables de entorno
+    - name: Exportar variables de entorno
+      run: |
+        echo "AMBIENTE_ACTIVO=URL_CORE" >> $GITHUB_ENV
+        echo "ENVIRONMENT=CORE" >> $GITHUB_ENV
+        echo "USERNAME=55285" >> $GITHUB_ENV
+        echo "PASSWORD=s4ds" >> $GITHUB_ENV
+
+    # 6. Ejecutar las pruebas en modo headless
+    - name: Ejecutar pruebas Maven
+      run: mvn clean test -Dheadless=true
+
+    # 7. Publicar reportes como artefactos
+    - name: Subir reportes
+      uses: actions/upload-artifact@v4
+      with:
+        name: Reportes-Automation
+        path: |
+          target/surefire-reports/
+          reports/

@@ -20,8 +20,11 @@ public class BaseTest {
 	public void setUp() {
 
 	    // ChromeDriver path SOLO se usa localmente
-	    System.setProperty("webdriver.chrome.driver",
-	            "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
+		if (System.getProperty("CI") == null) {
+		    System.setProperty("webdriver.chrome.driver",
+		        "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
+		}
+
 
 	    // ============================
 	    // HEADLESS CONFIG (FUNCIONA EN CI/CD)
@@ -52,6 +55,14 @@ public class BaseTest {
 
 	    driver.get(url);
 	}
+	
+	@After
+	public void tearDown() {
+	    if (driver != null) {
+	        driver.quit();
+	    }
+	}
+
 	
 	
 	
@@ -104,15 +115,6 @@ public class BaseTest {
 	
 	
 }
-
-
-
-
-
-
-
-
-
 
 
 
