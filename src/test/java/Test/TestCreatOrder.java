@@ -41,12 +41,11 @@ public class TestCreatOrder extends BaseTest {
 	    // Crear la orden
 	    OrderCreationPage order = new OrderCreationPage(driver);
 	    
-	    
+	    order.goNextStep();
 	    order.acceptDiscountAlertIfPresent();
 
 	    order.searchProduct("jeans");
 	    order.addFirstProduct();
-	    order.goNextStep();
 
 	    OrderSummaryPage summary = new OrderSummaryPage(driver);
 	    String productName = summary.getProductName();
@@ -54,10 +53,12 @@ public class TestCreatOrder extends BaseTest {
 	    String quantity = summary.getProductQuantity();
 	    String price = summary.getProductPrice();
 	    String total = summary.getOrderTotal();
+	    order.clickNextStep();
 	    summary.selectFirstShippingAddress();
 	    summary.selectPaymentCash();
 	    summary.confirmOrder();
 	    String orderNumber = summary.captureOrderNumber();
+	    
 
 	    System.out.println("Pedido creado exitosamente." + orderNumber);
 	    

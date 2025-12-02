@@ -75,21 +75,38 @@ public class UIActions {
     // =====================================
     // CLICK SEGURO + SCROLL NORMAL
     // =====================================
+   
     public void clickWithScroll(By locator) {
         scrollTo(locator);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        element.click();
+
+        try {
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+            element.click(); // Intento normal
+        } catch (Exception e) {
+            System.out.println(" \"El clic tradicional no fue posible (elemento cubierto o no interactuable). \" +\r\n"
+            		+ "    \"Se aplicó clic por JavaScript correctamente.\"Click en: " + locator.toString());
+            WebElement element = driver.findElement(locator);
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
     }
+
 
     // =====================================
     // CLICK CON SCROLL REPETITIVO
     // =====================================
+   
     public void clickUntilVisible(By locator) {
-
         WebElement element = scrollUntilVisible(locator, 7);
 
-        wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        } catch (Exception e) {
+            System.out.println("ClickUntilVisible falló → usando JS");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
     }
+
 
     // =====================================
     // TYPE / sendKeys

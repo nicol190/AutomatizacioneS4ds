@@ -1,7 +1,11 @@
 package Pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
 
@@ -20,8 +24,10 @@ public class LoginPage {
     }
 
     public void openLoginForm() {
-        driver.findElement(loginIcon).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
     }
+
 
     public void login(String username, String password) {
         driver.findElement(usernameField).sendKeys(username);

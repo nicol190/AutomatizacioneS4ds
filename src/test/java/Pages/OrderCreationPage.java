@@ -26,7 +26,7 @@ public class OrderCreationPage {
     private By searchBox = By.id("productReferencesTextField");
     private By btnAddFirstResult = By.id("btnActionSku_2");
 
-    private By btnNextStep = By.id("goToNextStepBody");
+    private By btnNextStep = By.id("goToNextStep");
     
     By successPopup = By.cssSelector("div.swal2-popup.swal2-icon-success");
     By successBtn   = By.cssSelector("div.swal2-popup.swal2-icon-success button.swal2-confirm");
@@ -35,6 +35,14 @@ public class OrderCreationPage {
         this.driver = driver;
         this.ui = new UIActions(driver);
     }
+    
+    public void goNextStep() {
+    	 ui.hideChatbotIfVisible();
+        if (ui.isElementPresent(btnNextStep)) {
+            ui.clickWithScroll(btnNextStep);
+        }
+    }
+    
     
     public void acceptDiscountWarning() {
         ui.clickWithScroll(popupAccept);
@@ -66,12 +74,6 @@ public class OrderCreationPage {
             ui.clickWithScroll(successBtn);
         }
     }
-
-    
-    public void goNextStep() {
-        ui.clickWithScroll(btnNextStep);
-    }
-    
     
    
     
@@ -116,6 +118,17 @@ public class OrderCreationPage {
         } catch (Exception ex) {
             throw new RuntimeException("Error al aceptar la alerta de descuento", ex);
         }
+    }
+    
+    // Botón NEXT del paso de productos
+    private By btnNextProductStep = By.id("goToNextStepHeader");
+
+    /**
+     * Realiza scroll y hace clic en el botón NEXT del paso de productos.
+     */
+    public void clickNextStep() {
+        ui.clickUntilVisible(btnNextProductStep);
+        System.out.println("Botón NEXT del paso de productos clickeado correctamente.");
     }
     
 }

@@ -9,121 +9,78 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import Utils.EnviromentConfig;
 
-
 public class BaseTest {
-	
-	protected WebDriver driver;
-	protected String username;
-	protected String password;
-	
-	@Before
-	public void setUp() {
 
-	    // ChromeDriver path SOLO se usa localmente
-		if (System.getProperty("CI") == null) {
-		    System.setProperty("webdriver.chrome.driver",
-		        "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
-		}
+    protected WebDriver driver;
+    protected String username;
+    protected String password;
 
+    @Before
+    public void setUp() {
 
-	    // ============================
-	    // HEADLESS CONFIG (FUNCIONA EN CI/CD)
-	    // ============================
-	    ChromeOptions options = new ChromeOptions();
-	    options.addArguments("--headless=new");
-	    options.addArguments("--no-sandbox");
-	    options.addArguments("--disable-dev-shm-usage");
-	    options.addArguments("--disable-gpu");
-	    options.addArguments("--remote-allow-origins=*");
-	    options.addArguments("--window-size=1920,1080");
+        // ============================
+        // 1. ChromeDriver local
+        // ============================
+        if (System.getProperty("CI") == null) {  
+            System.setProperty("webdriver.chrome.driver",
+                "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
+        }
 
-	    driver = new ChromeDriver(options);
+        // ============================
+        // 2. Chrome Options
+        // ============================
+        ChromeOptions options = new ChromeOptions();
 
-	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // HEADLESS solo cuando se pase -Dheadless=true
+        boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
 
-	    username = EnviromentConfig.getUser();
-	    password = EnviromentConfig.getPassword();
+        if (isHeadless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--window-size=1920,1080"); // obligatorio en headless
+        }
 
-	    if (username == null || password == null) {
-	        throw new RuntimeException("ERROR: USERNAME o PASSWORD no están configurados en variables de entorno.");
-	    }
+        driver = new ChromeDriver(options);
 
-	    String url = EnviromentConfig.getUrl();
-	    if (url == null) {
-	        throw new RuntimeException("ERROR: No se pudo obtener la URL del ambiente desde EnvironmentConfig.");
-	    }
+        // ============================
+        // 3. Maximizar SOLO si NO es headless
+        // ============================
+        if (!isHeadless) {
+            driver.manage().window().maximize();
+        }
 
-	    driver.get(url);
-	}
-	
-	@After
-	public void tearDown() {
-	    if (driver != null) {
-	        driver.quit();
-	    }
-	}
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-	
-	
-	
+        // ============================
+        // 4. Variables de entorno
+        // ============================
+        username = EnviromentConfig.getUser();
+        password = EnviromentConfig.getPassword();
 
-  //  protected WebDriver driver;
-  // protected String username;
-   // protected String password;
+        if (username == null || password == null) {
+            throw new RuntimeException("ERROR: USERNAME o PASSWORD no configurados.");
+        }
 
-   // @Before
-   // public void setUp() {
+        // ============================
+        // 5. Seleccionar url del ambiente
+        // ============================
+        String url = EnviromentConfig.getUrl();
 
-       // System.setProperty("webdriver.chrome.driver",
-      //          "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
+        if (url == null) {
+            throw new RuntimeException("ERROR: URL del ambiente no encontrada.");
+        }
 
-      //  driver = new ChromeDriver();
-      //  driver.manage().window().maximize();
-       // driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get(url);
+    }
 
-        // =========================
-        // 1. LEER VARIABLES DE ENTORNO
-        // =========================
-       // username = EnviromentConfig.getUser();
-       // password = EnviromentConfig.getPassword();
+    @After
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 
-       // if (username == null || password == null) {
-       //     throw new RuntimeException("ERROR: USERNAME o PASSWORD no están configurados en variables de entorno.");
-      //  }
-
-        // =========================
-        // 2. SELECCIONAR AMBIENTE
-        // =========================
-
-      //  String url = EnviromentConfig.getUrl();
-
-      //  if (url == null) {
-      //      throw new RuntimeException("ERROR: No se pudo obtener la URL del ambiente desde EnvironmentConfig.");
-     //  }
-////
-     //   // Abrir navegador en el ambiente correspondiente
-      //  driver.get(url);
-  //  }
-
-   // @After
-    //public void tearDown() {
-       // if (driver != null) {
-         //   driver.quit();
-       // }
-    //}
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
