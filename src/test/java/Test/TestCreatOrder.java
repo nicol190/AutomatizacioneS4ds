@@ -59,7 +59,6 @@ public class TestCreatOrder extends BaseTest {
 	    summary.confirmOrder();
 	    String orderNumber = summary.captureOrderNumber();
 	    
-
 	    System.out.println("Pedido creado exitosamente." + orderNumber);
 	    
 	    // Nuevas capturas
