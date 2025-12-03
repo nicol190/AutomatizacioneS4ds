@@ -7,7 +7,7 @@ on:
     branches: ["main"]
   workflow_dispatch:
   schedule:
-    - cron: "*/30 * * * *" # cada 30 minutos (opcional)
+   // - cron: "*/30 * * * *" # cada 30 minutos (opcional)
 
 jobs:
   build:
@@ -42,7 +42,7 @@ jobs:
     - name: Listar reportes personalizados
       run: |
         echo "Archivos en target/reports:"
-        ls -R target/reports || echo "⚠️ No se encontraron reportes"
+        ls -R target/reports || echo "No se encontraron reportes"
 
     - name: Subir reportes personalizados
       uses: actions/upload-artifact@v4
