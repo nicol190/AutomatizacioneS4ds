@@ -17,7 +17,7 @@ public class ReportGenerator {
             }
 
             // Ruta final: reports/OrderReport_XXXX.txt
-            String fileName = "reports/OrderReport_" + orderNumber + ".txt";
+            String fileName = "target/reports/OrderReport_" + orderNumber + ".txt";
             FileWriter writer = new FileWriter(fileName);
 
             writer.write("=== ORDER REPORT ===\n");

@@ -2,9 +2,12 @@ name: Automatización de Pedidos - CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *" # cada 30 minutos (opcional)
 
 jobs:
   build:
@@ -36,13 +39,14 @@ jobs:
     - name: Ejecutar pruebas Maven (headless)
       run: mvn clean test -Dheadless=true
 
-    - name: Listar reportes generados
+    - name: Listar reportes personalizados
       run: |
-        echo "Archivos en la carpeta reports:"
-        ls -R reports/
+        echo "Archivos en target/reports:"
+        ls -R target/reports || echo "⚠️ No se encontraron reportes"
 
-    - name: Subir reportes
+    - name: Subir reportes personalizados
       uses: actions/upload-artifact@v4
       with:
-        name: Reportes-Automation
-        path: reports/
+        name: Reportes-Personalizados
+        path: target/reports/
+        if-no-files-found: warn
