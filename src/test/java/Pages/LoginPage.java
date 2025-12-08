@@ -1,5 +1,7 @@
 package Pages;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -24,24 +26,46 @@ public class LoginPage {
         this.driver = driver;
     }
 
+   
+    
     public void openLoginForm() {
 
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 
             // Espera a que la página termine de cargar
-            wait.until(driver1 -> ((JavascriptExecutor) driver1)
-                    .executeScript("return document.readyState").equals("complete"));
+            
+            try {
+            	wait.until(driver1 -> ((JavascriptExecutor) driver1)
+                        .executeScript("return document.readyState").equals("complete"));
 
-            // Espera a que el elemento exista en el DOM
-            wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
+                // Espera a que el elemento exista en el DOM
+                wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
 
-            // Espera que sea visible
-            wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
+                // Espera que sea visible
+                wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
 
-            // Espera que sea clickeable
-            wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+                // Espera que sea clickeable
+                wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+                
+            } catch (Exception e) {
+                savePageSource(driver, "pagina_error");
+                throw e; // vuelve a lanzar la excepción para que la prueba falle
+            }
+
         
+    }
+    
+    public static void savePageSource(WebDriver driver, String nombre) {
+        try {
+            String html = driver.getPageSource();
+            File file = new File("reports/" + nombre + ".html");
+            FileWriter fw = new FileWriter(file);
+            fw.write(html);
+            fw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
