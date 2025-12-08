@@ -18,36 +18,41 @@ public class BaseTest {
     @Before
     public void setUp() {
 
-        // ============================
-        // 1. ChromeDriver local
-        // ============================
-        if (System.getProperty("CI") == null) {  
-            System.setProperty("webdriver.chrome.driver",
-                "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
-        }
+        // Detectar si estamos en CI (GitHub Actions)
+        boolean isCI = System.getenv("CI") != null;
 
-        // ============================
-        // 2. Chrome Options
-        // ============================
         ChromeOptions options = new ChromeOptions();
 
-        // HEADLESS solo cuando se pase -Dheadless=true
+        // Modo headless si se pasa -Dheadless=true
         boolean isHeadless = Boolean.parseBoolean(System.getProperty("headless", "false"));
 
-        if (isHeadless) {
+        if (isCI) {
+            // ============================
+            // MODO CI (GitHub Actions - Linux)
+            // ============================
             options.addArguments("--headless=new");
             options.addArguments("--disable-gpu");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--remote-allow-origins=*");
-            options.addArguments("--window-size=1920,1080"); // obligatorio en headless
+            options.addArguments("--window-size=1920,1080");
+        } else {
+            // ============================
+            // MODO LOCAL (Windows)
+            // ============================
+            System.setProperty("webdriver.chrome.driver",
+                    "src/test/java/ChromeDriver/chromedriver-win64/chromedriver.exe");
+
+            if (isHeadless) {
+                options.addArguments("--headless=new");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
+            }
         }
 
         driver = new ChromeDriver(options);
 
-        // ============================
-        // 3. Maximizar SOLO si NO es headless
-        // ============================
+        // Maximizar solo si no es headless
         if (!isHeadless) {
             driver.manage().window().maximize();
         }
@@ -55,7 +60,7 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // ============================
-        // 4. Variables de entorno
+        // Cargar variables de entorno
         // ============================
         username = EnviromentConfig.getUser();
         password = EnviromentConfig.getPassword();
@@ -65,7 +70,7 @@ public class BaseTest {
         }
 
         // ============================
-        // 5. Seleccionar url del ambiente
+        // Seleccionar URL del ambiente
         // ============================
         String url = EnviromentConfig.getUrl();
 
@@ -82,5 +87,4 @@ public class BaseTest {
             driver.quit();
         }
     }
-
 }
