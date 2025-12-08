@@ -21,11 +21,11 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Instalar Chrome + ChromeDriver
+    - name: Instalar Chrome (sin ChromeDriver)
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: stable
-        install-chromedriver: true
+        install-chromedriver: false
 
     - name: Exportar variables de entorno
       run: |
@@ -38,7 +38,7 @@ jobs:
     - name: Crear carpeta reports
       run: mkdir -p reports
 
-    - name: Ejecutar pruebas Maven (headless)
+    - name: Ejecutar pruebas Maven (headless, Selenium Manager)
       run: mvn clean test -Dheadless=true
 
     - name: Listar reportes personalizados
