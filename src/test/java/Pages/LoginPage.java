@@ -34,13 +34,13 @@ public class LoginPage {
                     .executeScript("return document.readyState").equals("complete"));
 
             // Espera a que el elemento exista en el DOM
-            wait.until(ExpectedConditions.presenceOfElementLocated(loginButton));
+            wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
 
             // Espera que sea visible
-            wait.until(ExpectedConditions.visibilityOfElementLocated(loginButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
 
             // Espera que sea clickeable
-            wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+            wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
         
     }
 
