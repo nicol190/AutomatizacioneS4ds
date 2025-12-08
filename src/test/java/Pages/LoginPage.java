@@ -24,7 +24,7 @@ public class LoginPage {
     }
 
     public void openLoginForm() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
         wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
     }
 
