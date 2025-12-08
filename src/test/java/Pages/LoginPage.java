@@ -3,6 +3,7 @@ package Pages;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,8 +25,23 @@ public class LoginPage {
     }
 
     public void openLoginForm() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(25));
-        wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
+
+            // Espera a que la página termine de cargar
+            wait.until(driver1 -> ((JavascriptExecutor) driver1)
+                    .executeScript("return document.readyState").equals("complete"));
+
+            // Espera a que el elemento exista en el DOM
+            wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
+
+            // Espera que sea visible
+            wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
+
+            // Espera que sea clickeable
+            wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+        
     }
 
 
