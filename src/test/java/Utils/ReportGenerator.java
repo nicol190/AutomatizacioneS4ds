@@ -1,3 +1,6 @@
+
+
+
 package Utils;
 
 import java.io.File;
@@ -10,14 +13,17 @@ public class ReportGenerator {
                                            String quantity, String price, String total) {
 
         try {
-            // Crear carpeta si no existe
-            File dir = new File("reports");
+            // Ruta absoluta al directorio de trabajo
+            String basePath = System.getProperty("user.dir") + "/reports";
+
+            // Crear carpeta
+            File dir = new File(basePath);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            // Ruta final: reports/OrderReport_XXXX.txt
-            String fileName = "reports/OrderReport_" + orderNumber + ".txt";
+            // Crear archivo
+            String fileName = basePath + "/OrderReport_" + orderNumber + ".txt";
             FileWriter writer = new FileWriter(fileName);
 
             writer.write("=== ORDER REPORT ===\n");
@@ -36,3 +42,4 @@ public class ReportGenerator {
         }
     }
 }
+
