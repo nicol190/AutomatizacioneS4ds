@@ -65,7 +65,9 @@ public class TestCreatOrder extends BaseTest {
 	 
 
 	    // Generar reporte
+	    System.out.println(">>> Llegando a generar el reporte...");
 	    ReportGenerator.generateOrderReport(orderNumber, productName, reference, quantity, price, total);
+	    System.out.println(">>> Reporte generado (o intentado)...");
 	}
 	
 

@@ -34,7 +34,10 @@ jobs:
         echo "ENVIRONMENT=CORE" >> $GITHUB_ENV
         echo "USERNAME=55285" >> $GITHUB_ENV
         echo "PASSWORD=s4ds" >> $GITHUB_ENV
-
+		
+	- name: Crear carpeta reports
+	  run: mkdir -p reports	
+	  
     - name: Ejecutar pruebas Maven (headless)
       run: mvn clean test -Dheadless=true
 
