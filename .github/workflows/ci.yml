@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest 
 
     steps:
     - name: Checkout del código
@@ -21,30 +21,35 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Instalar Chrome (sin ChromeDriver)
+  
+    - name: Instalar Chrome en Windows
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: stable
-        install-chromedriver: false
+        install-chromedriver: false  
 
     - name: Exportar variables de entorno
       run: |
-        echo "CI=true" >> $GITHUB_ENV
-        echo "AMBIENTE_ACTIVO=URL_CORE" >> $GITHUB_ENV
-        echo "ENVIRONMENT=CORE" >> $GITHUB_ENV
-        echo "USERNAME=55285" >> $GITHUB_ENV
-        echo "PASSWORD=s4ds" >> $GITHUB_ENV
+        echo "CI=true" >> $env:GITHUB_ENV
+        echo "AMBIENTE_ACTIVO=URL_CORE" >> $env:GITHUB_ENV
+        echo "ENVIRONMENT=CORE" >> $env:GITHUB_ENV
+        echo "USERNAME=55285" >> $env:GITHUB_ENV
+        echo "PASSWORD=s4ds" >> $env:GITHUB_ENV
+      shell: powershell
 
     - name: Crear carpeta reports
-      run: mkdir -p reports
+      run: mkdir reports
+      shell: powershell
 
     - name: Ejecutar pruebas Maven (headless, Selenium Manager)
       run: mvn clean test -Dheadless=true
+      shell: powershell
 
     - name: Listar reportes personalizados
       run: |
-        echo "Archivos en reports:"
-        ls -R reports || echo "No se encontraron reportes"
+        Write-Host "Archivos en reports:"
+        Get-ChildItem -Recurse reports
+      shell: powershell
 
     - name: Subir reportes personalizados
       uses: actions/upload-artifact@v4

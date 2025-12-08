@@ -84,6 +84,7 @@ public class BaseTest {
         }
 
         driver.get(url);
+     
     }
 
   
