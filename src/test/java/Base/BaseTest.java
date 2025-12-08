@@ -1,11 +1,16 @@
 package Base;
 
+import java.io.File;
 import java.time.Duration;
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import com.google.common.io.Files;
 
 import Utils.EnviromentConfig;
 
@@ -81,10 +86,28 @@ public class BaseTest {
         driver.get(url);
     }
 
+  
     @After
     public void tearDown() {
         if (driver != null) {
+            try {
+                File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+
+                // Crear carpeta "reports" por si no existe
+                new File("reports").mkdirs();
+
+                // Guardar screenshot
+                File destino = new File("reports/ERROR_" + System.currentTimeMillis() + ".png");
+                org.openqa.selenium.io.FileHandler.copy(screenshot, destino);
+
+                System.out.println("✔ Screenshot guardado en: " + destino.getAbsolutePath());
+            } catch (Exception e) {
+                System.out.println("⚠ No se pudo guardar screenshot: " + e.getMessage());
+            }
+
             driver.quit();
         }
     }
+
+    
 }
