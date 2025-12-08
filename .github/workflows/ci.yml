@@ -12,6 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
     - name: Checkout del código
       uses: actions/checkout@v4
 
@@ -21,11 +22,20 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Instalar Chrome en Windows
+    - name: Instalar Chrome (stable) sin Chromedriver
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: stable
         install-chromedriver: false
+
+    - name: Eliminar cualquier ChromeDriver del PATH
+      run: |
+        Write-Host "Limpieza de ChromeDriver previo..."
+        Get-Command chromedriver.exe -ErrorAction SilentlyContinue | ForEach-Object {
+          Write-Host "Eliminando: $($_.Source)"
+          Remove-Item $_.Source -Force -ErrorAction SilentlyContinue
+        }
+      shell: powershell
 
     - name: Exportar variables de entorno
       run: |
@@ -34,6 +44,8 @@ jobs:
         echo "ENVIRONMENT=CORE" >> $env:GITHUB_ENV
         echo "USERNAME=55285" >> $env:GITHUB_ENV
         echo "PASSWORD=s4ds" >> $env:GITHUB_ENV
+        echo "SELENIUM_WAIT=20" >> $env:GITHUB_ENV
+        echo "SELENIUM_PAGELOAD=40" >> $env:GITHUB_ENV
       shell: powershell
 
     - name: Crear carpeta reports
@@ -45,8 +57,10 @@ jobs:
         }
       shell: powershell
 
-    - name: Ejecutar pruebas Maven (headless, Selenium Manager)
-      run: mvn clean test -Dheadless=true
+    - name: Ejecutar pruebas Maven (headless recomendado)
+      env:
+        HEADLESS: true
+      run: mvn -B clean test -Dheadless=true
       shell: powershell
 
     - name: Listar archivos en reports
