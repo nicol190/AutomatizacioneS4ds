@@ -40,12 +40,12 @@ jobs:
 
     - name: Listar reportes personalizados
       run: |
-        echo "Archivos en target/reports:"
-        ls -R target/reports || echo "No se encontraron reportes"
+        echo "Archivos en reports:"
+        ls -R reports || echo "No se encontraron reportes"
 
     - name: Subir reportes personalizados
       uses: actions/upload-artifact@v4
       with:
         name: Reportes-Personalizados
-        path: target/reports/
+        path: reports/
         if-no-files-found: warn
