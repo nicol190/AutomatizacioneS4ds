@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest 
+    runs-on: windows-latest
 
     steps:
     - name: Checkout del código
@@ -21,12 +21,11 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-  
     - name: Instalar Chrome en Windows
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: stable
-        install-chromedriver: false  
+        install-chromedriver: false
 
     - name: Exportar variables de entorno
       run: |
@@ -38,14 +37,19 @@ jobs:
       shell: powershell
 
     - name: Crear carpeta reports
-      run: mkdir reports
+      run: |
+        if (!(Test-Path "reports")) {
+            New-Item -ItemType Directory -Path "reports"
+        } else {
+            Write-Host "La carpeta 'reports' ya existe. Continuando..."
+        }
       shell: powershell
 
     - name: Ejecutar pruebas Maven (headless, Selenium Manager)
       run: mvn clean test -Dheadless=true
       shell: powershell
 
-    - name: Listar reportes personalizados
+    - name: Listar archivos en reports
       run: |
         Write-Host "Archivos en reports:"
         Get-ChildItem -Recurse reports
