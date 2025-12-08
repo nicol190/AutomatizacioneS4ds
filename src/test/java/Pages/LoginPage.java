@@ -16,7 +16,7 @@ public class LoginPage {
     private By usernameField = By.id("user_login");
     private By passwordField = By.id("user_pass");
     private By submitButton = By.id("loginform");
-
+    private By loginButton = By.id("btn_goToLogin");
 
     private By errorMessage = By.id("login_error");
 
@@ -34,13 +34,13 @@ public class LoginPage {
                     .executeScript("return document.readyState").equals("complete"));
 
             // Espera a que el elemento exista en el DOM
-            wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
+            wait.until(ExpectedConditions.presenceOfElementLocated(loginButton));
 
             // Espera que sea visible
-            wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(loginButton));
 
             // Espera que sea clickeable
-            wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+            wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
         
     }
 
