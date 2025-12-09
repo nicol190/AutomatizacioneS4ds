@@ -27,34 +27,40 @@ public class LoginPage {
     }
 
    
-    
     public void openLoginForm() {
 
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
+        try {
+            System.out.println("URL actual: " + driver.getCurrentUrl());
+            System.out.println("Título de la página: " + driver.getTitle());
 
-            // Espera a que la página termine de cargar
-            
-            try {
-            	wait.until(driver1 -> ((JavascriptExecutor) driver1)
-                        .executeScript("return document.readyState").equals("complete"));
+            int iframes = driver.findElements(By.tagName("iframe")).size();
+            System.out.println("Iframes encontrados: " + iframes);
 
-                // Espera a que el elemento exista en el DOM
-                wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
+            System.out.println("Esperando que la página cargue...");
+            wait.until(driver1 -> ((JavascriptExecutor) driver1)
+                    .executeScript("return document.readyState").equals("complete"));
 
-                // Espera que sea visible
-                wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
+            System.out.println("Buscando icono login con XPath alt='loginIcon'...");
+            wait.until(ExpectedConditions.presenceOfElementLocated(loginIcon));
 
-                // Espera que sea clickeable
-                wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
-                
-            } catch (Exception e) {
-                savePageSource(driver, "pagina_error");
-                throw e; // vuelve a lanzar la excepción para que la prueba falle
-            }
+            System.out.println("Visible...");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(loginIcon));
 
-        
+            System.out.println("Clickeable...");
+            wait.until(ExpectedConditions.elementToBeClickable(loginIcon)).click();
+
+            System.out.println("Click ejecutado correctamente");
+
+        } catch (Exception e) {
+            System.out.println("No se encontró el elemento loginIcon o falló el click");
+            System.out.println("Error: " + e.getMessage());
+            savePageSource(driver, "pagina_error");
+            throw e;
+        }
     }
+
     
     public static void savePageSource(WebDriver driver, String nombre) {
         try {
