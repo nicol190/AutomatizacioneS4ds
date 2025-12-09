@@ -40,7 +40,7 @@ jobs:
     - name: Exportar variables de entorno
       run: |
         echo "CI=true" >> $env:GITHUB_ENV
-        echo "AMBIENTE_ACTIVO=URL_CORE" >> $env:GITHUB_ENV
+        echo "AMBIENTE_ACTIVO=URL_TEST" >> $env:GITHUB_ENV
         echo "ENVIRONMENT=CORE" >> $env:GITHUB_ENV
         echo "USERNAME=55285" >> $env:GITHUB_ENV
         echo "PASSWORD=s4ds" >> $env:GITHUB_ENV
