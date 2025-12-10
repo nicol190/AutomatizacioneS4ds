@@ -96,8 +96,6 @@ public class BaseTest {
         driver.get(url);
      
     }
-    
-
   
     @After
     public void tearDown() {
