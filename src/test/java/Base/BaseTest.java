@@ -12,6 +12,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.google.common.io.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import Utils.EnviromentConfig;
 
@@ -20,6 +22,14 @@ public class BaseTest {
     protected WebDriver driver;
     protected String username;
     protected String password;
+    
+    static {
+        // ============================
+        // Suprimir warnings de CDP en consola
+        // ============================
+        Logger seleniumLogger = Logger.getLogger("org.openqa.selenium.devtools");
+        seleniumLogger.setLevel(Level.SEVERE); // Solo errores graves
+    }
 
     @Before
     public void setUp() {
@@ -55,7 +65,6 @@ public class BaseTest {
                 options.addArguments("--window-size=1920,1080");
             }
         }
-
         driver = new ChromeDriver(options);
 
         // Maximizar solo si no es headless
